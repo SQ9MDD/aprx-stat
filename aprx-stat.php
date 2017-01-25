@@ -70,14 +70,16 @@ $ilosc_ramek_radiowych = $ilosc_ramek_iface_one + $ilosc_ramek_iface_two;
 $ilosc_ramek_iface_one_tx = count($ramki_iface_one_tx_arr);
 $ilosc_ramek_iface_two_tx = count($ramki_iface_two_tx_arr);
 $ilosc_ramek_radiowych_tx = $ilosc_ramek_iface_one_tx + $ilosc_ramek_iface_two_tx;
+$t_start = substr($aprx_log_db[0],0,19);
+$t_stop = substr($aprx_log_db[$ilosc_wszystkich_ramek-1],0,19);
 
 echo "<html><body fontfamily=tahoma><center><table border=0 width=90%><tr><td colspan=4><hr noshade size=1 width=100%></td></tr><tr><td colspan=4>";
-echo "Ilosc wszystkich odebranych ramek w logu: <b>$ilosc_wszystkich_ramek</b>";
+echo "Ilosc wszystkich odebranych ramek w logu: <b>$ilosc_wszystkich_ramek</b> od: <b>$t_start</b> do <b>$t_stop</b>";
 echo "<br>";
 echo "Ilosc ramek odebranych z APRSIS <b>$ilosc_ramek_aprsis</b>";
 echo "<br>";
 echo "</td></tr><tr><td colspan=4><hr noshade size=1 width=100%></td></tr><tr><td colspan=4><font color=green>";
-echo "Ilosc wszystkich odebranych ramek odebranych radiowo: <b>$ilosc_ramek_radiowych</b>";
+echo "Ilosc wszystkich ramek odebranych radiowo: <b>$ilosc_ramek_radiowych</b>";
 echo "<br>";
 echo "$primary_interface ($primary_interface_frequency) - <b>$ilosc_ramek_iface_one</b>";
 echo "<br>";
