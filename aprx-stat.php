@@ -72,44 +72,47 @@ $interval = $timestamp_stop - $timestamp_start;
 $interval_minute = round($interval / 60);
 $days = round($interval_minute/1440);
 $houer = round(($interval_minute - ($days * 1440))/60);
-$minute = round($interval_minute - ($days * 1440) - ($houer * 60));
 
-$ilosc_ramek_aprsis = count($ramki_aprsis);
+//$ilosc_ramek_aprsis = count($ramki_aprsis);
 $ilosc_ramek_iface_one = count($ramki_iface_one_arr);
 $average_iface_one = round($ilosc_ramek_iface_one / $interval_minute,2);
+
 $ilosc_ramek_iface_two = count($ramki_iface_two_arr);
 $average_iface_two = round($ilosc_ramek_iface_two / $interval_minute,2);
+
 $ilosc_ramek_radiowych = $ilosc_ramek_iface_one + $ilosc_ramek_iface_two;
+
 $ilosc_ramek_iface_one_tx = count($ramki_iface_one_tx_arr);
+$average_iface_one_tx = round($ilosc_ramek_iface_one_tx / $interval_minute,2);
+
 $ilosc_ramek_iface_two_tx = count($ramki_iface_two_tx_arr);
+$average_iface_two_tx = round($ilosc_ramek_iface_two_tx / $interval_minute,2);
+
 $ilosc_ramek_radiowych_tx = $ilosc_ramek_iface_one_tx + $ilosc_ramek_iface_two_tx;
 
-
-
 echo "<html><body fontfamily=tahoma><center><table border=0 width=90%><tr><td colspan=4><hr noshade size=1 width=100%></td></tr><tr><td colspan=4>";
-echo "Ilosc wszystkich odebranych ramek w logu: <b>$ilosc_wszystkich_ramek</b> od: <b>$t_start</b> do <b>$t_stop</b> <b>($days"."d $houer"."h $minute"."m)</b>";
+echo "Ilosc wszystkich odebranych ramek w logu: <b>$ilosc_wszystkich_ramek</b> od: <b>$t_start</b> do <b>$t_stop</b> <b>($days"."d $houer"."h)</b>";
 echo "<br>";
-echo "Ilosc ramek odebranych z APRSIS <b>$ilosc_ramek_aprsis</b>";
-echo "<br>";
-echo "</td></tr><tr><td colspan=4><hr noshade size=1 width=100%></td></tr><tr><td colspan=4><font color=green>";
-echo "Ilosc wszystkich ramek odebranych radiowo: <b>$ilosc_ramek_radiowych</b>";
+echo "</td></tr><tr><td colspan=2><font color=green>";
+echo "Ilosc ramek odebranych radiowo: <b>$ilosc_ramek_radiowych</b>";
 echo "<br>";
 echo "$primary_interface ($primary_interface_frequency) - <b>$ilosc_ramek_iface_one ($average_iface_one pkt per minute)</b>";
 echo "<br>";
 echo "$secondary_interface ($secondary_interface_frequency) - <b>$ilosc_ramek_iface_two ($average_iface_two pkt per minute)</b>";
 echo "<br>";
-echo "</td></tr><tr><td colspan=4><hr noshade size=1 width=100%></td></tr><tr><td colspan=4><font color=red>";
-echo "Ilosc wszystkich wyslanych ramek: <b>$ilosc_ramek_radiowych_tx</b>";
+echo "</td><td colspan=2><font color=red>";
+echo "Ilosc ramek wyslanych radiowo: <b>$ilosc_ramek_radiowych_tx</b>";
 echo "<br>";
-echo "$primary_interface ($primary_interface_frequency) - <b>$ilosc_ramek_iface_one_tx</b>";
+echo "$primary_interface ($primary_interface_frequency) - <b>$ilosc_ramek_iface_one_tx ($average_iface_one_tx pkt per minute)</b>";
 echo "<br>";
-echo "$secondary_interface ($secondary_interface_frequency) - <b>$ilosc_ramek_iface_two_tx</b>";
+echo "$secondary_interface ($secondary_interface_frequency) - <b>$ilosc_ramek_iface_two_tx ($average_iface_two_tx pkt per minute)</b>";
 echo "</td></tr><tr><td colspan=4><hr noshade size=1 width=100%>Statystyki interfejsow radiowych:<br></td></tr>";
 echo "<tr>";
-echo "<td valign=top><font color=blue> RX Interfejs $primary_interface ($primary_interface_frequency)<br>";	
+echo "<td valign=top><font color=green> RX Interfejs $primary_interface ($primary_interface_frequency)<br>";	
 	$income = interface_traffic($linia_znak_2m);
+	$calls_number = count($income);
 	echo"<pre>";
-	echo"<b>CALLSIGN \t pkt.</b>\n";
+	echo"<b>CALLS ($calls_number) \t pkt.</b>\n";
 	while (list($key, $value) = each($income)) {
 		$len = strlen($key);
 		if($len <= 6){
@@ -120,10 +123,11 @@ echo "<td valign=top><font color=blue> RX Interfejs $primary_interface ($primary
 		echo "$key $tabs ($value)\n";
 	}
 	echo "<br>";
-echo "<td valign=top><font color=blue> TX Interfejs $primary_interface ($primary_interface_frequency)<br>";
+echo "<td valign=top><font color=red> TX Interfejs $primary_interface ($primary_interface_frequency)<br>";
 	$income = interface_traffic($linia_znak_2m_tx);
+	$calls_number = count($income);
 	echo"<pre>";
-	echo"<b>CALLSIGN \t pkt.</b>\n";	
+	echo"<b>CALLS ($calls_number) \t pkt.</b>\n";	
 	while (list($key, $value) = each($income)) {
 		$len = strlen($key);
 		if($len <= 6){
@@ -134,10 +138,11 @@ echo "<td valign=top><font color=blue> TX Interfejs $primary_interface ($primary
 		echo "$key $tabs ($value)\n";
 	}
 	echo "<br>";
-echo "</td><td valign=top><font color=blue> RX Interfejs $secondary_interface ($secondary_interface_frequency)<br>";
+echo "</td><td valign=top><font color=green> RX Interfejs $secondary_interface ($secondary_interface_frequency)<br>";
 	$income = interface_traffic($linia_znak_70cm);
+	$calls_number = count($income);
 	echo"<pre>";
-	echo"<b>CALLSIGN \t pkt.</b>\n";	
+	echo"<b>CALLS ($calls_number) \t pkt.</b>\n";	
 	while (list($key, $value) = each($income)) {
 		$len = strlen($key);
 		if($len <= 6){
@@ -148,10 +153,11 @@ echo "</td><td valign=top><font color=blue> RX Interfejs $secondary_interface ($
 		echo "$key $tabs ($value)\n";
 	}
 	echo "<br>";	
-echo "<td valign=top><font color=blue> TX Interfejs $secondary_interface ($secondary_interface_frequency)<br>";	
+echo "<td valign=top><font color=red> TX Interfejs $secondary_interface ($secondary_interface_frequency)<br>";	
 	$income = interface_traffic($linia_znak_70cm_tx);
+	$calls_number = count($income);
 	echo"<pre>";
-	echo"<b>CALLSIGN \t pkt.</b>\n";	
+	echo"<b>CALLS ($calls_number) \t pkt.</b>\n";	
 	while (list($key, $value) = each($income)) {
 		$len = strlen($key);
 		if($len <= 6){
@@ -162,5 +168,5 @@ echo "<td valign=top><font color=blue> TX Interfejs $secondary_interface ($secon
 		echo "$key $tabs ($value)\n";
 	}
 	echo "<br>";	
-echo "</td></tr></table>";
+echo "</td></tr><tr><td colspan=4><hr noshade size=1><br><center>SQ9MDD@2017</center></td></t></table>";
 ?>
