@@ -63,27 +63,40 @@ for($a=0;$a<=(count($aprx_log_db)-1);$a++){
 	}
 }
 
+$t_start = substr($aprx_log_db[0],0,19);
+$t_stop = substr($aprx_log_db[$ilosc_wszystkich_ramek-1],0,19);
+$timestamp_start = strtotime($t_start);
+$timestamp_stop = strtotime($t_stop);
+$interval = $timestamp_stop - $timestamp_start;
+
+$interval_minute = round($interval / 60);
+$days = round($interval_minute/1440);
+$houer = round(($interval_minute - ($days * 1440))/60);
+$minute = round($interval_minute - ($days * 1440) - ($houer * 60));
+
 $ilosc_ramek_aprsis = count($ramki_aprsis);
 $ilosc_ramek_iface_one = count($ramki_iface_one_arr);
+$average_iface_one = round($ilosc_ramek_iface_one / $interval_minute,2);
 $ilosc_ramek_iface_two = count($ramki_iface_two_arr);
+$average_iface_two = round($ilosc_ramek_iface_two / $interval_minute,2);
 $ilosc_ramek_radiowych = $ilosc_ramek_iface_one + $ilosc_ramek_iface_two;
 $ilosc_ramek_iface_one_tx = count($ramki_iface_one_tx_arr);
 $ilosc_ramek_iface_two_tx = count($ramki_iface_two_tx_arr);
 $ilosc_ramek_radiowych_tx = $ilosc_ramek_iface_one_tx + $ilosc_ramek_iface_two_tx;
-$t_start = substr($aprx_log_db[0],0,19);
-$t_stop = substr($aprx_log_db[$ilosc_wszystkich_ramek-1],0,19);
+
+
 
 echo "<html><body fontfamily=tahoma><center><table border=0 width=90%><tr><td colspan=4><hr noshade size=1 width=100%></td></tr><tr><td colspan=4>";
-echo "Ilosc wszystkich odebranych ramek w logu: <b>$ilosc_wszystkich_ramek</b> od: <b>$t_start</b> do <b>$t_stop</b>";
+echo "Ilosc wszystkich odebranych ramek w logu: <b>$ilosc_wszystkich_ramek</b> od: <b>$t_start</b> do <b>$t_stop</b> <b>($days"."d $houer"."h $minute"."m)</b>";
 echo "<br>";
 echo "Ilosc ramek odebranych z APRSIS <b>$ilosc_ramek_aprsis</b>";
 echo "<br>";
 echo "</td></tr><tr><td colspan=4><hr noshade size=1 width=100%></td></tr><tr><td colspan=4><font color=green>";
 echo "Ilosc wszystkich ramek odebranych radiowo: <b>$ilosc_ramek_radiowych</b>";
 echo "<br>";
-echo "$primary_interface ($primary_interface_frequency) - <b>$ilosc_ramek_iface_one</b>";
+echo "$primary_interface ($primary_interface_frequency) - <b>$ilosc_ramek_iface_one ($average_iface_one pkt per minute)</b>";
 echo "<br>";
-echo "$secondary_interface ($secondary_interface_frequency) - <b>$ilosc_ramek_iface_two</b>";
+echo "$secondary_interface ($secondary_interface_frequency) - <b>$ilosc_ramek_iface_two ($average_iface_two pkt per minute)</b>";
 echo "<br>";
 echo "</td></tr><tr><td colspan=4><hr noshade size=1 width=100%></td></tr><tr><td colspan=4><font color=red>";
 echo "Ilosc wszystkich wyslanych ramek: <b>$ilosc_ramek_radiowych_tx</b>";
