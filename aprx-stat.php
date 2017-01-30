@@ -6,18 +6,42 @@
  SQ9MDD rysieklabus (at) gmail (dot) com
 */
 //*****CONFIG******
-$callsign = "SQ9MDD";
+$callsign = "SQ9MDD";								//your callsign
 
-$primary_interface = "SQ9MDD-1";
-$primary_interface_frequency = "144.800MHz";
+$primary_interface = "SQ9MDD-1";					//your callsign and ssid for primary interface
+$primary_interface_frequency = "144.800MHz";		//frequency for primary interface
 
-$secondary_interface = "SQ9MDD-2";
-$secondary_interface_frequency = "432.500MHz";
+$secondary_interface = "SQ9MDD-2";					//your callsign and ssid for secondary interface
+$secondary_interface_frequency = "432.500MHz";		//frequency for secondary interface
 
-$aprx_log_db = file('/var/log/aprx/aprx-rf.log');
+$aprx_log_db = file('/var/log/aprx/aprx-rf.log');	//aprx log-file full path 
+
+$language	=	'EN';								//default PL -polish, EN -english
 
 //***END CONFIG****
+
+switch($language){
+	case('PL'):
+		$label_log_sumary = "Ilosc wszystkich odebranych ramek w logu";
+		$label_log_rx = "Ilosc ramek odebranych radiowo";
+		$label_log_tx = "Ilosc ramek wyslanych radiowo";
+		$label_log_radio_stat = "Statystyki interfejsow radiowych";
+		$label_interface = "Interfejs";
+	break;
+	case('EN'):
+		$label_log_sumary = "Logged frames";
+		$label_log_rx = "Received from radio interfaces";
+		$label_log_tx = "Transmitted over radio interfaces";
+		$label_log_radio_stat = "Radio interfaces counters";
+		$label_interface = "interface";
+	break;
+}
+
 function interface_traffic(array $wszystkie){
+	$licznik = count($wszystkie);
+	if($licznik <= 0){
+		return(0);
+	}
 	$unikalne = array_unique($wszystkie);
 	$unikalne = array_values(array_unique($unikalne));
 	for($a=0;$a<=(count($unikalne)-1);$a++){
@@ -70,8 +94,8 @@ $timestamp_stop = strtotime($t_stop);
 $interval = $timestamp_stop - $timestamp_start;
 
 $interval_minute = round($interval / 60);
-$days = round($interval_minute/1440);
-$houer = round(($interval_minute - ($days * 1440))/60);
+//$days = round($interval_minute/1440);
+$houer = round($interval_minute/60);
 
 //$ilosc_ramek_aprsis = count($ramki_aprsis);
 $ilosc_ramek_iface_one = count($ramki_iface_one_arr);
@@ -90,27 +114,30 @@ $average_iface_two_tx = round($ilosc_ramek_iface_two_tx / $interval_minute,2);
 
 $ilosc_ramek_radiowych_tx = $ilosc_ramek_iface_one_tx + $ilosc_ramek_iface_two_tx;
 
-echo "<html><body fontfamily=tahoma><center><table border=0 width=90%><tr><td colspan=4><hr noshade size=1 width=100%></td></tr><tr><td colspan=4>";
-echo "Ilosc wszystkich odebranych ramek w logu: <b>$ilosc_wszystkich_ramek</b> od: <b>$t_start</b> do <b>$t_stop</b> <b>($days"."d $houer"."h)</b>";
+echo "<html><body fontfamily=tahoma><center><table border=0 width=95%><tr><td colspan=4><hr noshade size=1 width=100%></td></tr><tr><td colspan=4>";
+echo "$label_log_sumary: <b>$ilosc_wszystkich_ramek</b> od: <b>$t_start</b> do <b>$t_stop</b> <b>($houer"."h)</b>";
 echo "<br>";
 echo "</td></tr><tr><td colspan=2><font color=green>";
-echo "Ilosc ramek odebranych radiowo: <b>$ilosc_ramek_radiowych</b>";
+echo "$label_log_rx: <b>$ilosc_ramek_radiowych</b>";
 echo "<br>";
 echo "$primary_interface ($primary_interface_frequency) - <b>$ilosc_ramek_iface_one ($average_iface_one pkt per minute)</b>";
 echo "<br>";
 echo "$secondary_interface ($secondary_interface_frequency) - <b>$ilosc_ramek_iface_two ($average_iface_two pkt per minute)</b>";
 echo "<br>";
 echo "</td><td colspan=2><font color=red>";
-echo "Ilosc ramek wyslanych radiowo: <b>$ilosc_ramek_radiowych_tx</b>";
+echo "$label_log_tx: <b>$ilosc_ramek_radiowych_tx</b>";
 echo "<br>";
 echo "$primary_interface ($primary_interface_frequency) - <b>$ilosc_ramek_iface_one_tx ($average_iface_one_tx pkt per minute)</b>";
 echo "<br>";
 echo "$secondary_interface ($secondary_interface_frequency) - <b>$ilosc_ramek_iface_two_tx ($average_iface_two_tx pkt per minute)</b>";
-echo "</td></tr><tr><td colspan=4><hr noshade size=1 width=100%>Statystyki interfejsow radiowych:<br></td></tr>";
+echo "</td></tr><tr><td colspan=4><hr noshade size=1 width=100%>$label_log_radio_stat:<br></td></tr>";
 echo "<tr>";
-echo "<td valign=top><font color=green> RX Interfejs $primary_interface ($primary_interface_frequency)<br>";	
-	$income = interface_traffic($linia_znak_2m);
-	$calls_number = count($income);
+echo "<td valign=top><font color=green> RX $label_interface $primary_interface ($primary_interface_frequency)<br>";	
+	$calls_number = 0;
+	if($linia_znak_2m){
+		$income = interface_traffic($linia_znak_2m);
+		$calls_number = count($income);
+	}
 	echo"<pre>";
 	echo"<b>CALLS ($calls_number) \t pkt.</b>\n";
 	while (list($key, $value) = each($income)) {
@@ -123,9 +150,12 @@ echo "<td valign=top><font color=green> RX Interfejs $primary_interface ($primar
 		echo "$key $tabs ($value)\n";
 	}
 	echo "<br>";
-echo "<td valign=top><font color=red> TX Interfejs $primary_interface ($primary_interface_frequency)<br>";
-	$income = interface_traffic($linia_znak_2m_tx);
-	$calls_number = count($income);
+echo "<td valign=top><font color=red> TX $label_interface $primary_interface ($primary_interface_frequency)<br>";
+	$calls_number = 0;
+	if($linia_znak_2m_tx){
+		$income = interface_traffic($linia_znak_2m_tx);
+		$calls_number = count($income);
+	}
 	echo"<pre>";
 	echo"<b>CALLS ($calls_number) \t pkt.</b>\n";	
 	while (list($key, $value) = each($income)) {
@@ -138,34 +168,42 @@ echo "<td valign=top><font color=red> TX Interfejs $primary_interface ($primary_
 		echo "$key $tabs ($value)\n";
 	}
 	echo "<br>";
-echo "</td><td valign=top><font color=green> RX Interfejs $secondary_interface ($secondary_interface_frequency)<br>";
-	$income = interface_traffic($linia_znak_70cm);
-	$calls_number = count($income);
-	echo"<pre>";
-	echo"<b>CALLS ($calls_number) \t pkt.</b>\n";	
-	while (list($key, $value) = each($income)) {
-		$len = strlen($key);
-		if($len <= 6){
-			$tabs = "\t\t";
-		}else{
-			$tabs = "\t";
-		}
-		echo "$key $tabs ($value)\n";
+echo "</td><td valign=top><font color=green> RX $label_interface $secondary_interface ($secondary_interface_frequency)<br>";
+	$calls_number = 0;
+	if($linia_znak_70cm){
+		$income = interface_traffic($linia_znak_70cm);
+		$calls_number = count($income);
 	}
-	echo "<br>";	
-echo "<td valign=top><font color=red> TX Interfejs $secondary_interface ($secondary_interface_frequency)<br>";	
-	$income = interface_traffic($linia_znak_70cm_tx);
-	$calls_number = count($income);
 	echo"<pre>";
-	echo"<b>CALLS ($calls_number) \t pkt.</b>\n";	
-	while (list($key, $value) = each($income)) {
-		$len = strlen($key);
-		if($len <= 6){
-			$tabs = "\t\t";
-		}else{
-			$tabs = "\t";
+	echo"<b>CALLS ($calls_number) \t pkt.</b>\n";
+		while (list($key, $value) = each($income)) {
+			$len = strlen($key);
+			if($len <= 6){
+				$tabs = "\t\t";
+			}else{
+				$tabs = "\t";
+			}
+			echo "$key $tabs ($value)\n";
 		}
-		echo "$key $tabs ($value)\n";
+	echo "<br>";	
+echo "<td valign=top><font color=red> TX $label_interface $secondary_interface ($secondary_interface_frequency)<br>";
+	$calls_number = 0;	
+	if($linia_znak_70cm_tx){
+		$income = interface_traffic($linia_znak_70cm_tx);
+		$calls_number = count($income);
+	}
+	echo"<pre>";
+	echo"<b>CALLS ($calls_number) \t pkt.</b>\n";
+	if($calls_number > 0){
+		while (list($key, $value) = each($income)) {
+			$len = strlen($key);
+			if($len <= 6){
+				$tabs = "\t\t";
+			}else{
+				$tabs = "\t";
+			}
+			echo "$key $tabs ($value)\n";
+		}		
 	}
 	echo "<br>";	
 echo "</td></tr><tr><td colspan=4><hr noshade size=1><br><center>SQ9MDD@2017</center></td></t></table>";
