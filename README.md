@@ -4,4 +4,4 @@ SIMPLE WEBSTAT for APRX
 
 aprx-stat.php <- web stat
 
-aprx-status.php <- scrpit for APRX beacon exec
+aprx-status.php <- script for APRX beacon exec
