@@ -4,14 +4,17 @@
  Released under GPL.v.2
  
  SQ9MDD rysieklabus (at) gmail (dot) com
+ 
+ CHANGELOG
+ 2017.01.31 multilanguage support
 */
 //*****CONFIG******
 $callsign = "SQ9MDD";								//your callsign
 
-$primary_interface = "SQ9MDD-1";					//your callsign and ssid for primary interface
+$primary_interface = "SQ9MDD-1";					//your callsign and ssid for primary interface (see to logfile)
 $primary_interface_frequency = "144.800MHz";		//frequency for primary interface
 
-$secondary_interface = "SQ9MDD-2";					//your callsign and ssid for secondary interface
+$secondary_interface = "SQ9MDD-2";					//your callsign and ssid for secondary interface (see to logfile)
 $secondary_interface_frequency = "432.500MHz";		//frequency for secondary interface
 
 $aprx_log_db = file('/var/log/aprx/aprx-rf.log');	//aprx log-file full path 
@@ -27,6 +30,8 @@ switch($language){
 		$label_log_tx = "Ilosc ramek wyslanych radiowo";
 		$label_log_radio_stat = "Statystyki interfejsow radiowych";
 		$label_interface = "Interfejs";
+		$label_from = "od";
+		$label_to = "do";
 	break;
 	case('EN'):
 		$label_log_sumary = "Logged frames";
@@ -34,6 +39,8 @@ switch($language){
 		$label_log_tx = "Transmitted over radio interfaces";
 		$label_log_radio_stat = "Radio interfaces counters";
 		$label_interface = "interface";
+		$label_from = "from";
+		$label_to = "to";		
 	break;
 }
 
@@ -115,7 +122,7 @@ $average_iface_two_tx = round($ilosc_ramek_iface_two_tx / $interval_minute,2);
 $ilosc_ramek_radiowych_tx = $ilosc_ramek_iface_one_tx + $ilosc_ramek_iface_two_tx;
 
 echo "<html><body fontfamily=tahoma><center><table border=0 width=95%><tr><td colspan=4><hr noshade size=1 width=100%></td></tr><tr><td colspan=4>";
-echo "$label_log_sumary: <b>$ilosc_wszystkich_ramek</b> od: <b>$t_start</b> do <b>$t_stop</b> <b>($houer"."h)</b>";
+echo "$label_log_sumary: <b>$ilosc_wszystkich_ramek</b> $label_from: <b>$t_start</b> $label_to: <b>$t_stop</b> <b>($houer"."h)</b>";
 echo "<br>";
 echo "</td></tr><tr><td colspan=2><font color=green>";
 echo "$label_log_rx: <b>$ilosc_ramek_radiowych</b>";
