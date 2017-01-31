@@ -19,7 +19,7 @@ $secondary_interface_frequency = "432.500MHz";		//frequency for secondary interf
 
 $aprx_log_db = file('/var/log/aprx/aprx-rf.log');	//aprx log-file full path 
 //$aprx_log_db = file('/tmp/aprx1-rf.log');
-$language	=	'EN';								//default PL -polish, EN -english
+$language	=	'PL';								//default PL -polish, EN -english
 
 //***END CONFIG****
 
