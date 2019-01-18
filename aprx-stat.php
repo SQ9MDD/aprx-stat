@@ -170,7 +170,7 @@ $average_iface_two_tx = round($ilosc_ramek_iface_two_tx / $interval_minute,2);
 
 $ilosc_ramek_radiowych_tx = $ilosc_ramek_iface_one_tx + $ilosc_ramek_iface_two_tx;
 
-echo "<html><body fontfamily=tahoma><center><table border=0 width=95%><tr><td colspan=4><hr noshade size=1 width=100%></td></tr><tr><td colspan=4>";
+echo "<html><style> A:link{text-decoration: none;} td {font-family: Tahoma; font-size: 10pt;}</style><TITLE>..::APRX DASBOARD::..</TITLE><body fontfamily=tahoma><center><table border=0 width=95%><tr><td colspan=4><hr noshade size=1 width=100%></td></tr><tr><td colspan=4>";
 echo "$label_log_sumary: <b>$ilosc_wszystkich_ramek</b> $label_from: <b>$t_start</b> $label_to: <b>$t_stop</b> <b>($houer"."h)</b>";
 echo "<br>";
 echo "</td></tr><tr><td colspan=2><font color=green>";
@@ -203,7 +203,8 @@ echo "<td valign=top><font color=green> RX $label_interface $primary_interface (
 		}else{
 			$tabs = "\t";
 		}
-		echo "$key $tabs ($value)\n";
+		//echo "$key $tabs ($value)\n";
+		echo "<a href=https://aprs.fi/#!mt=roadmap&z=14&call=$key&timerange=3600&tail=3600><font color=green>$key $tabs ($value)</font>\n";
 	}
 	echo "<br>";
 echo "<td valign=top><font color=red> TX $label_interface $primary_interface ($primary_interface_frequency)<br>";
@@ -221,7 +222,8 @@ echo "<td valign=top><font color=red> TX $label_interface $primary_interface ($p
 		}else{
 			$tabs = "\t";
 		}
-		echo "$key $tabs ($value)\n";
+		//echo "$key $tabs ($value)\n";
+		echo "<a href=https://aprs.fi/#!mt=roadmap&z=14&call=$key&timerange=3600&tail=3600><font color=red>$key $tabs ($value)</font>\n";
 	}
 	echo "<br>";
 echo "</td><td valign=top><font color=green> RX $label_interface $secondary_interface ($secondary_interface_frequency)<br>";
@@ -239,7 +241,8 @@ echo "</td><td valign=top><font color=green> RX $label_interface $secondary_inte
 			}else{
 				$tabs = "\t";
 			}
-			echo "$key $tabs ($value)\n";
+			//echo "$key $tabs ($value)\n";
+			echo "<a href=https://aprs.fi/#!mt=roadmap&z=14&call=$key&timerange=3600&tail=3600><font color=red>$key $tabs ($value)</font>\n";
 		}
 	echo "<br>";	
 echo "<td valign=top><font color=red> TX $label_interface $secondary_interface ($secondary_interface_frequency)<br>";
@@ -258,7 +261,8 @@ echo "<td valign=top><font color=red> TX $label_interface $secondary_interface (
 			}else{
 				$tabs = "\t";
 			}
-			echo "$key $tabs ($value)\n";
+			//echo "$key $tabs ($value)\n";
+			echo "<a href=https://aprs.fi/#!mt=roadmap&z=14&call=$key&timerange=3600&tail=3600><font color=red>$key $tabs ($value)</font>\n";
 		}		
 	}
 	echo "<br>";	
